@@ -49,7 +49,11 @@ const BrandSchema = new mongoose.Schema({
 
 const collection = new mongoose.model("BrandStore", BrandSchema);
 
-// Replace the uri string with your MongoDB deployment's connection string.
+app.get("/data", (req, res) => {
+// Use the client to connect to the database
+async function fetchData() {
+try {
+  // Replace the uri string with your MongoDB deployment's connection string.
 const uri =
 "mongodb+srv://WorkinX:JoPlgIK8JUpjMeuY@cluster0.qm9dld0.mongodb.net/WorkinX";
  
@@ -59,15 +63,6 @@ const client = new MongoClient(uri);
 // Define the database and collection names
 const dbName = "WorkinX";
 const collectionName = "brandstores"; 
-
-// app.get("/", async (req,res)=>{
-//   res.send
-// })
-
-app.get("/data", (req, res) => {
-// Use the client to connect to the database
-async function fetchData() {
-try {
   await client.connect(); 
   console.log("Connected to MongoDB"); 
 
@@ -80,18 +75,8 @@ try {
 
   console.log("Data fetched from MongoDB:");
 
-  collection.find()
-  .sort({ _id: -1 }) // sort in descending order by _id
-  .limit(1) // retrieve only the last document
-  .then((lastEntry) => {
-    const storeId = lastEntry;
-    res.render("testing",{docs,storeId});
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+  res.render("testing",{docs});
 
- 
 } catch (err) {
   console.error(err);
 } finally { 
